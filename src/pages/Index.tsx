@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HeroSection from '@/components/HeroSection';
@@ -111,26 +110,31 @@ const Index = () => {
     setInputText('');
   };
 
-  // Background particles animation config
-  const particles = Array.from({ length: 15 }, (_, i) => ({
+  // Enhanced background particles animation config
+  const particles = Array.from({ length: 25 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: Math.random() * 20 + 5,
-    duration: Math.random() * 25 + 15
+    size: Math.random() * 30 + 5,
+    duration: Math.random() * 25 + 15,
+    color: i % 5 === 0 ? 'primary' : 
+           i % 5 === 1 ? 'secondary' : 
+           i % 5 === 2 ? 'accent' : 
+           i % 5 === 3 ? 'purple-500' : 'pink-400'
   }));
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-secondary/20">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-secondary/10 to-background">
       {/* Background Elements */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-accent/10 via-transparent to-transparent" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-accent/15 via-transparent to-transparent" />
         
+        {/* Colorful particles */}
         {particles.map(particle => (
           <motion.div 
             key={particle.id}
-            className="absolute rounded-full bg-primary/5 blur-3xl"
+            className={`absolute rounded-full bg-${particle.color}/20 blur-3xl`}
             style={{ 
               left: `${particle.x}%`, 
               top: `${particle.y}%`,
@@ -138,9 +142,9 @@ const Index = () => {
               height: `${particle.size}px`,
             }}
             animate={{ 
-              x: [0, Math.random() * 30 - 15, 0], 
-              y: [0, Math.random() * 30 - 15, 0],
-              opacity: [0.1, Math.random() * 0.3 + 0.1, 0.1]
+              x: [0, Math.random() * 40 - 20, 0], 
+              y: [0, Math.random() * 40 - 20, 0],
+              opacity: [0.2, Math.random() * 0.4 + 0.2, 0.2]
             }}
             transition={{ 
               duration: particle.duration, 
@@ -151,9 +155,9 @@ const Index = () => {
         ))}
         
         <motion.div 
-          className="absolute top-48 -left-24 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
+          className="absolute top-48 -left-24 w-64 h-64 rounded-full bg-primary/10 blur-3xl"
           animate={{ 
-            x: [0, 10, 0], 
+            x: [0, 20, 0], 
             y: [0, 15, 0],
           }}
           transition={{ 
@@ -164,13 +168,26 @@ const Index = () => {
         />
         
         <motion.div 
-          className="absolute bottom-32 -right-32 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
+          className="absolute bottom-32 -right-32 w-96 h-96 rounded-full bg-secondary/15 blur-3xl"
           animate={{ 
-            x: [0, -20, 0], 
-            y: [0, -15, 0],
+            x: [0, -30, 0], 
+            y: [0, -25, 0],
           }}
           transition={{ 
-            duration: 10, 
+            duration: 12, 
+            repeat: Infinity,
+            ease: "easeInOut" 
+          }}
+        />
+        
+        <motion.div 
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full bg-accent/10 blur-3xl"
+          animate={{ 
+            x: [0, 25, 0], 
+            y: [0, -20, 0],
+          }}
+          transition={{ 
+            duration: 15, 
             repeat: Infinity,
             ease: "easeInOut" 
           }}
@@ -229,20 +246,20 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 bg-card/60 backdrop-blur-sm border-t border-border">
+      <footer className="py-6 glass-bg border-t border-primary/10">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
               Designed with precision and care
             </p>
             <div className="flex items-center space-x-4 mt-4 md:mt-0">
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 About
               </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 Privacy
               </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 Terms
               </a>
             </div>

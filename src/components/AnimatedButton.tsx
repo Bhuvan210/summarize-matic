@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 interface AnimatedButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   children: React.ReactNode;
-  variant?: 'default' | 'outline' | 'ghost' | 'gradient' | 'glass';
+  variant?: 'default' | 'outline' | 'ghost' | 'gradient' | 'glass' | 'colorful';
   loading?: boolean;
   icon?: React.ReactNode;
   glowEffect?: boolean;
@@ -27,8 +27,9 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     default: "bg-primary text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
     outline: "border border-primary/20 text-primary bg-transparent hover:bg-primary/5 shadow-sm px-6 py-3",
     ghost: "text-primary hover:bg-primary/10 px-4 py-2",
-    gradient: "bg-gradient-to-r from-primary/90 via-primary to-primary/70 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
-    glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3"
+    gradient: "bg-gradient-to-r from-primary/90 via-secondary to-accent/70 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
+    glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
+    colorful: "bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white shadow-md hover:shadow-lg px-6 py-3 hover:scale-105"
   };
   
   // Motion props that are compatible with the component
@@ -90,7 +91,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
               className="absolute -inset-px rounded-full opacity-0 transition duration-300 group-hover:opacity-100"
               initial={false}
               style={{ 
-                background: "radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)" 
+                background: "radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%)" 
               }}
             />
           </>
