@@ -3,12 +3,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface AnimatedButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   children: React.ReactNode;
   variant?: 'default' | 'outline' | 'ghost' | 'gradient' | 'glass';
   loading?: boolean;
   icon?: React.ReactNode;
   glowEffect?: boolean;
+  className?: string;
 }
 
 const AnimatedButton: React.FC<AnimatedButtonProps> = ({ 
@@ -30,6 +31,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3"
   };
   
+  // Motion props that are compatible with the component
   const buttonMotionProps = {
     whileTap: { scale: 0.98 },
     whileHover: { scale: 1.02 },
@@ -53,7 +55,8 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
         className={cn(baseStyles, variantStyles[variant], className)}
         {...buttonMotionProps}
         disabled={loading || props.disabled}
-        {...props}
+        // Using type assertion to ensure HTML button props are compatible with motion.button
+        {...props as any}
       >
         {loading ? (
           <span className="flex items-center justify-center">

@@ -121,13 +121,16 @@ export const summarizeText = async (text: string): Promise<SummarizerResponse> =
   
   // Extract potential key points (using simple heuristics for demo)
   const keyPoints = sentences
-    .filter(s => 
-      s.includes('important') || 
-      s.includes('key') || 
-      s.includes('significant') ||
-      s.includes('primary') ||
-      s.includes('essential')
-    )
+    .filter(s => {
+      const lowercaseSentence = s.toLowerCase();
+      return (
+        lowercaseSentence.includes('important') || 
+        lowercaseSentence.includes('key') || 
+        lowercaseSentence.includes('significant') ||
+        lowercaseSentence.includes('primary') ||
+        lowercaseSentence.includes('essential')
+      );
+    })
     .map(s => s.trim())
     .slice(0, 3);
   
