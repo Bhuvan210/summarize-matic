@@ -5,7 +5,8 @@ import HeroSection from '@/components/HeroSection';
 import TextInput from '@/components/TextInput';
 import SummaryResult from '@/components/SummaryResult';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { summarizeText, summarizeFile, summarizeUrl, SummarizerResponse } from '@/services/summarizer';
+import { SummarizerResponse } from '@/services/summarizer';
+import { apiService } from '@/services/api';
 import { toast } from '@/components/ui/use-toast';
 
 const Index = () => {
@@ -20,13 +21,18 @@ const Index = () => {
     setProcessingType('text');
     
     try {
-      const summary = await summarizeText(text);
-      setResult(summary);
-      toast({
-        title: "Summary generated",
-        description: "Your text has been successfully summarized.",
-        duration: 3000,
-      });
+      const response = await apiService.summarizeText(text);
+      
+      if (response.success && response.data) {
+        setResult(response.data);
+        toast({
+          title: "Summary generated",
+          description: "Your text has been successfully summarized.",
+          duration: 3000,
+        });
+      } else {
+        throw new Error(response.error || 'Failed to generate summary');
+      }
     } catch (error) {
       console.error('Error generating summary:', error);
       toast({
@@ -45,13 +51,18 @@ const Index = () => {
     setProcessingType('file');
     
     try {
-      const summary = await summarizeFile(file);
-      setResult(summary);
-      toast({
-        title: "File processed",
-        description: `"${file.name}" has been successfully summarized.`,
-        duration: 3000,
-      });
+      const response = await apiService.summarizeFile(file);
+      
+      if (response.success && response.data) {
+        setResult(response.data);
+        toast({
+          title: "File processed",
+          description: `"${file.name}" has been successfully summarized.`,
+          duration: 3000,
+        });
+      } else {
+        throw new Error(response.error || 'Failed to process file');
+      }
     } catch (error) {
       console.error('Error processing file:', error);
       toast({
@@ -70,13 +81,18 @@ const Index = () => {
     setProcessingType('url');
     
     try {
-      const summary = await summarizeUrl(url);
-      setResult(summary);
-      toast({
-        title: "URL processed",
-        description: "Content from the URL has been successfully summarized.",
-        duration: 3000,
-      });
+      const response = await apiService.summarizeUrl(url);
+      
+      if (response.success && response.data) {
+        setResult(response.data);
+        toast({
+          title: "URL processed",
+          description: "Content from the URL has been successfully summarized.",
+          duration: 3000,
+        });
+      } else {
+        throw new Error(response.error || 'Failed to process URL');
+      }
     } catch (error) {
       console.error('Error processing URL:', error);
       toast({

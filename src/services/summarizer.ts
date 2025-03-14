@@ -1,6 +1,7 @@
 
 // This service would ideally connect to a real API
 // For demo purposes, we're mocking the summarization
+import { extractTextFromFile, ParsedFileContent } from './fileService';
 
 export interface SummarizerResponse {
   summary: string;
@@ -11,67 +12,8 @@ export interface SummarizerResponse {
   fileType?: string;
   wordCount?: number;
   readingTime?: string;
+  metadata?: Record<string, any>;
 }
-
-type FileParsingResult = {
-  text: string;
-  fileType: string;
-  fileName: string;
-};
-
-// Helper function to extract text from different file types
-const extractTextFromFile = async (file: File): Promise<FileParsingResult> => {
-  const fileName = file.name;
-  const fileType = file.type;
-  
-  // Text files
-  if (fileType.includes('text/plain')) {
-    const text = await file.text();
-    return { text, fileType, fileName };
-  }
-  
-  // PDF files
-  if (fileType.includes('application/pdf')) {
-    // For demo purposes, we're simulating PDF parsing
-    // In a real app, you would use a library like pdf.js
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    return { 
-      text: `This is simulated text extracted from the PDF file "${fileName}". In a production environment, we would use proper PDF parsing libraries to extract the text content accurately.`,
-      fileType, 
-      fileName 
-    };
-  }
-  
-  // Word documents
-  if (fileType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document') || 
-      fileType.includes('application/msword')) {
-    // For demo, simulate Word document parsing
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    return { 
-      text: `This is simulated text extracted from the Word document "${fileName}". In a production environment, we would use proper document parsing libraries to extract the text content accurately.`,
-      fileType, 
-      fileName 
-    };
-  }
-  
-  // Images (OCR simulation)
-  if (fileType.includes('image/')) {
-    // Simulate OCR processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    return { 
-      text: `This is simulated text extracted via OCR from the image "${fileName}". In a production environment, we would use proper OCR services or libraries to extract the text content from the image.`,
-      fileType, 
-      fileName 
-    };
-  }
-  
-  // Default fallback
-  return { 
-    text: `Unable to extract text from this file type (${fileType}). Please try a supported file format.`,
-    fileType, 
-    fileName 
-  };
-};
 
 // Calculate reading time based on words
 const calculateReadingTime = (text: string): string => {
@@ -180,14 +122,15 @@ export const summarizeText = async (text: string): Promise<SummarizerResponse> =
 
 export const summarizeFile = async (file: File): Promise<SummarizerResponse> => {
   try {
-    const { text, fileType, fileName } = await extractTextFromFile(file);
-    const result = await summarizeText(text);
+    const parsedFile = await extractTextFromFile(file);
+    const result = await summarizeText(parsedFile.text);
     
     return {
       ...result,
       sourceType: 'file',
-      fileName,
-      fileType
+      fileName: parsedFile.fileName,
+      fileType: parsedFile.fileType,
+      metadata: parsedFile.metadata
     };
   } catch (error) {
     console.error('Error processing file:', error);
@@ -213,6 +156,11 @@ export const summarizeUrl = async (url: string): Promise<SummarizerResponse> => 
   
   return {
     ...result,
-    sourceType: 'url'
+    sourceType: 'url',
+    metadata: {
+      url,
+      siteName: new URL(url).hostname,
+      fetchDate: new Date().toISOString()
+    }
   };
 };
