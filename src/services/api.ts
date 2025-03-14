@@ -101,5 +101,55 @@ export const apiService = {
         error: error instanceof Error ? error.message : 'An unknown error occurred',
       };
     }
+  },
+
+  async shareViaSocialMedia(platform: string, content: { title: string; text: string; url?: string }): Promise<ApiResponse<{ success: boolean }>> {
+    try {
+      // Simulate network latency
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // In a real app, this would interact with social media APIs
+      console.log(`Sharing to ${platform}:`, content);
+      
+      // Mock success response
+      return {
+        success: true,
+        data: { success: true }
+      };
+    } catch (error) {
+      console.error(`Error sharing to ${platform}:`, error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : `Failed to share to ${platform}`
+      };
+    }
+  },
+  
+  async generateSharingLink(summary: string): Promise<ApiResponse<{ shareUrl: string; expiresAt: string }>> {
+    try {
+      // Simulate network latency
+      await new Promise(resolve => setTimeout(resolve, 600));
+      
+      // Generate a mock sharing URL
+      const mockShareId = Math.random().toString(36).substring(2, 15);
+      const shareUrl = `https://app.summarize-matic.com/share/${mockShareId}`;
+      
+      // Set expiration date (24 hours from now)
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+      
+      return {
+        success: true,
+        data: {
+          shareUrl,
+          expiresAt
+        }
+      };
+    } catch (error) {
+      console.error('Error generating sharing link:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to generate sharing link'
+      };
+    }
   }
 };
