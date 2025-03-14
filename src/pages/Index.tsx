@@ -5,17 +5,19 @@ import HeroSection from '@/components/HeroSection';
 import TextInput from '@/components/TextInput';
 import SummaryResult from '@/components/SummaryResult';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { summarizeText, SummarizerResponse } from '@/services/summarizer';
+import { summarizeText, summarizeFile, summarizeUrl, SummarizerResponse } from '@/services/summarizer';
 import { toast } from '@/components/ui/use-toast';
 
 const Index = () => {
   const [inputText, setInputText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<SummarizerResponse | null>(null);
+  const [processingType, setProcessingType] = useState<'text' | 'file' | 'url'>('text');
 
-  const handleSubmit = async (text: string) => {
+  const handleTextSubmit = async (text: string) => {
     setInputText(text);
     setIsProcessing(true);
+    setProcessingType('text');
     
     try {
       const summary = await summarizeText(text);
@@ -38,10 +40,69 @@ const Index = () => {
     }
   };
 
+  const handleFileSubmit = async (file: File) => {
+    setIsProcessing(true);
+    setProcessingType('file');
+    
+    try {
+      const summary = await summarizeFile(file);
+      setResult(summary);
+      toast({
+        title: "File processed",
+        description: `"${file.name}" has been successfully summarized.`,
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Error processing file:', error);
+      toast({
+        title: "Error",
+        description: "Failed to process file. Please try a different format.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleUrlSubmit = async (url: string) => {
+    setIsProcessing(true);
+    setProcessingType('url');
+    
+    try {
+      const summary = await summarizeUrl(url);
+      setResult(summary);
+      toast({
+        title: "URL processed",
+        description: "Content from the URL has been successfully summarized.",
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Error processing URL:', error);
+      toast({
+        title: "Error",
+        description: "Failed to process URL. Please check the URL and try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleReset = () => {
     setResult(null);
     setInputText('');
   };
+
+  // Background particles animation config
+  const particles = Array.from({ length: 15 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 20 + 5,
+    duration: Math.random() * 25 + 15
+  }));
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-secondary/20">
@@ -49,6 +110,29 @@ const Index = () => {
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
         <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-accent/10 via-transparent to-transparent" />
+        
+        {particles.map(particle => (
+          <motion.div 
+            key={particle.id}
+            className="absolute rounded-full bg-primary/5 blur-3xl"
+            style={{ 
+              left: `${particle.x}%`, 
+              top: `${particle.y}%`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+            }}
+            animate={{ 
+              x: [0, Math.random() * 30 - 15, 0], 
+              y: [0, Math.random() * 30 - 15, 0],
+              opacity: [0.1, Math.random() * 0.3 + 0.1, 0.1]
+            }}
+            transition={{ 
+              duration: particle.duration, 
+              repeat: Infinity,
+              ease: "easeInOut" 
+            }}
+          />
+        ))}
         
         <motion.div 
           className="absolute top-48 -left-24 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
@@ -90,7 +174,12 @@ const Index = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <TextInput onSubmit={handleSubmit} isProcessing={isProcessing} />
+              <TextInput 
+                onSubmit={handleTextSubmit} 
+                onFileSubmit={handleFileSubmit}
+                onUrlSubmit={handleUrlSubmit}
+                isProcessing={isProcessing} 
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -100,7 +189,7 @@ const Index = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <SummaryResult summary={result.summary} onReset={handleReset} />
+              <SummaryResult summary={result} onReset={handleReset} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -112,13 +201,19 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <LoadingSpinner text="Analyzing and summarizing text..." />
+            <LoadingSpinner 
+              text={
+                processingType === 'text' ? "Analyzing and summarizing text..." :
+                processingType === 'file' ? "Processing file content..." :
+                "Fetching and analyzing URL content..."
+              } 
+            />
           </motion.div>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="py-6 bg-card border-t border-border">
+      <footer className="py-6 bg-card/60 backdrop-blur-sm border-t border-border">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
