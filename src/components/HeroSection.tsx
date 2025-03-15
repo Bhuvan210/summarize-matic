@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import AnimatedButton from '@/components/AnimatedButton';
 import { ArrowRight } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const HeroSection: React.FC = () => {
   return (
@@ -13,6 +14,9 @@ const HeroSection: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
     >
+      {/* Theme toggle */}
+      <ThemeToggle />
+      
       {/* Enhanced badge with softer colors */}
       <motion.div 
         className="inline-flex items-center justify-center mb-6 px-4 py-2 bg-primary/10 text-primary font-semibold rounded-full border border-primary/20 shadow-md"
