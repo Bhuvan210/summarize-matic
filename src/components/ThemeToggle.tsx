@@ -1,17 +1,26 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Switch } from '@/components/ui/switch';
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ThemeToggle: React.FC = () => {
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === 'dark';
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  
+  // Only show the toggle after component is mounted to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  const isDark = mounted && (theme === 'dark' || resolvedTheme === 'dark');
 
   const handleToggle = () => {
     setTheme(isDark ? 'light' : 'dark');
   };
+
+  if (!mounted) return null;
 
   return (
     <motion.div 
