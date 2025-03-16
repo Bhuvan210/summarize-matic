@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -100,7 +101,7 @@
 
   .text-input:focus {
     transform: scale(1.005);
-    box-shadow: 0 0 0 2px rgba(142, 81, 255, 0.2);
+    box-shadow: 0 0 0 2px rgba(var(--ring), 0.2);
   }
 
   .animated-gradient-text {
