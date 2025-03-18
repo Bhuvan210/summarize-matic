@@ -25,8 +25,8 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   
   const variantStyles = {
     default: "bg-primary text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
-    outline: "border border-primary/20 text-primary bg-transparent hover:bg-primary/5 shadow-sm px-6 py-3",
-    ghost: "text-primary hover:bg-primary/10 px-4 py-2",
+    outline: "border border-primary/20 text-foreground bg-transparent hover:bg-primary/5 shadow-sm px-6 py-3",
+    ghost: "text-foreground hover:bg-primary/10 px-4 py-2",
     gradient: "bg-gradient-to-r from-primary/90 via-secondary to-accent/70 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
     glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
     colorful: "bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white shadow-md hover:shadow-lg px-6 py-3 hover:scale-105"
@@ -85,15 +85,8 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
           </span>
         ) : (
           <>
-            {icon && <span className="mr-2">{icon}</span>}
             {children}
-            <motion.div
-              className="absolute -inset-px rounded-full opacity-0 transition duration-300 group-hover:opacity-100"
-              initial={false}
-              style={{ 
-                background: "radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%)" 
-              }}
-            />
+            {icon && <span className="ml-2">{icon}</span>}
           </>
         )}
       </motion.button>

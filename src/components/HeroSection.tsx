@@ -17,9 +17,9 @@ const HeroSection: React.FC = () => {
       {/* Theme toggle */}
       <ThemeToggle />
       
-      {/* Enhanced badge with softer colors */}
+      {/* Badge with blue styling */}
       <motion.div 
-        className="inline-flex items-center justify-center mb-6 px-4 py-2 bg-primary/10 text-primary font-semibold rounded-full border border-primary/20 shadow-md"
+        className="inline-flex items-center justify-center mb-6 px-4 py-2 bg-primary/10 text-foreground rounded-full border border-primary/20 shadow-md"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
@@ -31,21 +31,21 @@ const HeroSection: React.FC = () => {
         <span className="text-base">Powered by AI</span>
       </motion.div>
       
-      {/* Heading with softer gradient */}
+      {/* Heading with multi-color text */}
       <motion.h1 
-        className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 tracking-tight drop-shadow-sm"
+        className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 tracking-tight"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.6 }}
       >
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary/90 via-secondary/90 to-accent/80">
-          Distill <span className="animated-gradient-text font-extrabold">clarity</span> from complexity
+        <span className="text-foreground">
+          Distill <span className="text-foreground">clarity</span> <span className="text-primary">from complexity</span>
         </span>
       </motion.h1>
       
-      {/* Description with softer background */}
+      {/* Description */}
       <motion.p 
-        className="text-lg md:text-xl font-medium text-foreground/90 max-w-3xl mx-auto mb-8 bg-background/60 backdrop-blur-sm py-2 px-4 rounded-lg border border-border/20"
+        className="text-lg md:text-xl font-medium text-foreground/90 max-w-3xl mx-auto mb-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.6 }}
@@ -54,7 +54,7 @@ const HeroSection: React.FC = () => {
         sophisticated AI text summarization tool.
       </motion.p>
       
-      {/* Call-to-action button with softer colors */}
+      {/* Call-to-action button */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,32 +63,31 @@ const HeroSection: React.FC = () => {
       >
         <AnimatedButton 
           variant="outline" 
-          glowEffect={true}
           icon={<ArrowRight className="ml-1" />}
-          className="text-lg py-3 px-8 border-primary/30 hover:bg-primary/5"
+          className="text-lg py-3 px-8 rounded-full border-primary/30 text-foreground bg-transparent hover:bg-primary/10"
           onClick={() => document.getElementById('text-input')?.focus()}
         >
           Try it now
         </AnimatedButton>
       </motion.div>
       
-      {/* Feature badges with softer colors */}
+      {/* Feature badges */}
       <motion.div
         className="flex flex-wrap justify-center gap-4 mt-2"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}
       >
-        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold text-primary bg-primary/5 border border-primary/20 shadow-sm">
+        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold bg-primary/20 text-foreground border-primary/40 rounded-full">
           AI-Powered
         </Badge>
-        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold text-secondary-foreground bg-secondary/10 border border-secondary/20 shadow-sm">
+        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold bg-muted/50 text-foreground border-muted/40 rounded-full">
           Accurate
         </Badge>
-        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold text-accent-foreground bg-accent/10 border border-accent/20 shadow-sm">
+        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold bg-muted/30 text-foreground border-muted/20 rounded-full">
           Fast
         </Badge>
-        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold text-purple-700 bg-purple-50 border border-purple-200 shadow-sm">
+        <Badge variant="outline" className="py-2 px-4 text-sm font-semibold bg-foreground/10 text-foreground border-foreground/20 rounded-full">
           Intuitive
         </Badge>
       </motion.div>
