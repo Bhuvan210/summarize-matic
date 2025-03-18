@@ -24,17 +24,17 @@ const ThemeToggle: React.FC = () => {
 
   return (
     <motion.div 
-      className="flex items-center gap-2 fixed top-4 right-4 z-50 bg-background/50 backdrop-blur-md p-2 rounded-full border border-border shadow-md"
+      className="flex items-center gap-2 fixed top-4 right-4 z-50 bg-muted/30 backdrop-blur-md p-2 rounded-full border border-border/30 shadow-md"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <Sun className={`h-4 w-4 ${isDark ? 'text-muted-foreground' : 'text-primary text-yellow-500'}`} />
+      <Sun className="h-4 w-4 text-foreground" />
       <Switch 
         checked={isDark}
         onCheckedChange={handleToggle}
       />
-      <Moon className={`h-4 w-4 ${isDark ? 'text-primary' : 'text-muted-foreground'}`} />
+      <Moon className="h-4 w-4 text-foreground" />
     </motion.div>
   );
 };
