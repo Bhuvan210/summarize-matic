@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { SummarizerResponse } from '@/services/summarizer';
 import { apiService } from '@/services/api';
 import { toast } from '@/components/ui/use-toast';
+import AuthButton from '@/components/AuthButton';
 
 const Index = () => {
   const [inputText, setInputText] = useState('');
@@ -110,7 +111,6 @@ const Index = () => {
     setInputText('');
   };
 
-  // Enhanced background particles animation config
   const particles = Array.from({ length: 25 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -125,12 +125,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-secondary/10 to-background">
-      {/* Background Elements */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
         <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-accent/15 via-transparent to-transparent" />
         
-        {/* Colorful particles */}
         {particles.map(particle => (
           <motion.div 
             key={particle.id}
@@ -194,7 +192,10 @@ const Index = () => {
         />
       </div>
 
-      {/* Content */}
+      <div className="absolute top-4 right-24 z-50">
+        <AuthButton />
+      </div>
+
       <main className="flex-grow container mx-auto px-4 pb-20">
         <HeroSection />
         
@@ -245,7 +246,6 @@ const Index = () => {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="py-6 glass-bg border-t border-primary/10">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
