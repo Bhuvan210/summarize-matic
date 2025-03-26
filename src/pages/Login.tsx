@@ -7,28 +7,51 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/components/ui/use-toast';
 import ThemeToggle from '@/components/ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
+import jwt_decode from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleGoogleSuccess = (credentialResponse: any) => {
     console.log('Google login success:', credentialResponse);
     
     // Here you would typically validate the token with your backend
-    // For demo purposes, we'll just simulate a successful login
+    // For demo purposes, we'll just decode the JWT to get user info
     
-    // Store the token in localStorage (in a real app, consider more secure storage)
-    localStorage.setItem('auth_token', credentialResponse.credential);
-    localStorage.setItem('is_authenticated', 'true');
-    
-    toast({
-      title: "Login successful",
-      description: "You have been successfully logged in with Google.",
-      duration: 3000,
-    });
-    
-    // Redirect to the main page
-    navigate('/');
+    try {
+      const decoded: any = jwt_decode(credentialResponse.credential);
+      console.log('Decoded token:', decoded);
+      
+      // Extract user profile from Google response
+      const userProfile = {
+        name: decoded.name,
+        email: decoded.email,
+        picture: decoded.picture
+      };
+      
+      // Login with the token and user profile
+      login(credentialResponse.credential, userProfile);
+      
+      toast({
+        title: "Login successful",
+        description: `Welcome, ${userProfile.name}!`,
+        duration: 3000,
+      });
+      
+      // Redirect to the main page
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      // Still log them in even if profile extraction fails
+      login(credentialResponse.credential);
+      toast({
+        title: "Login successful",
+        duration: 3000,
+      });
+      navigate('/');
+    }
   };
 
   const handleGoogleError = () => {
