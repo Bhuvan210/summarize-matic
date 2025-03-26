@@ -14,7 +14,7 @@ import Login from "./pages/Login";
 const queryClient = new QueryClient();
 
 // Your Google client ID should be stored in an environment variable in a production app
-const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID"; // Replace with your actual Google client ID
+const GOOGLE_CLIENT_ID = "864970090212-91hta9qttkqfe7smn34aj2irunaembm2.apps.googleusercontent.com"; // Replace with your actual Google client ID
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
