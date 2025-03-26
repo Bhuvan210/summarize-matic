@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from '@/components/ui/use-toast';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const Login = () => {
     // For demo purposes, we'll just decode the JWT to get user info
     
     try {
-      const decoded: any = jwt_decode(credentialResponse.credential);
+      const decoded: any = jwtDecode(credentialResponse.credential);
       console.log('Decoded token:', decoded);
       
       // Extract user profile from Google response
