@@ -6,9 +6,9 @@ import { GoogleLogin } from '@react-oauth/google';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/components/ui/use-toast';
-import ThemeToggle from '@/components/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
 import { jwtDecode } from 'jwt-decode';
+import AuthButton from '@/components/AuthButton';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -66,7 +66,8 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-secondary/10 to-background">
-      <ThemeToggle />
+      {/* Header with auth button (includes theme toggle) */}
+      <AuthButton />
       
       {/* Background Elements (simplified from Index page) */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
@@ -136,3 +137,4 @@ const Login = () => {
 };
 
 export default Login;
+
