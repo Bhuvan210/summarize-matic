@@ -29,9 +29,9 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     default: buttonVariants({ variant: "default" }),
     outline: buttonVariants({ variant: "outline" }),
     ghost: buttonVariants({ variant: "ghost" }),
-    gradient: "bg-gradient-to-r from-primary/90 via-[#9B30F9] to-[#D946EF]/70 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
-    glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
-    colorful: "bg-gradient-to-r from-primary via-[#9B30F9] to-[#D946EF] text-white shadow-md hover:shadow-lg px-6 py-3 hover:scale-105",
+    gradient: "bg-gradient-to-r from-primary/80 via-[#A48FFF]/70 to-[#BEB6FF]/60 text-primary-foreground shadow-sm hover:shadow-md px-6 py-3",
+    glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-sm hover:shadow-md px-6 py-3",
+    colorful: "bg-gradient-to-r from-primary/90 via-[#A48FFF]/80 to-[#BEB6FF]/70 text-white shadow-sm hover:shadow-md px-6 py-3 hover:scale-105",
     highlight: buttonVariants({ variant: "highlight" })
   };
   
@@ -52,9 +52,9 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   return (
     <div className={`relative ${glowEffect ? 'group' : ''}`}>
       {glowEffect && variant === 'highlight' ? (
-        <div className="absolute inset-0 rounded-full bg-[#9B30F9]/30 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+        <div className="absolute inset-0 rounded-full bg-[#A48FFF]/20 blur-lg opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
       ) : glowEffect ? (
-        <div className="absolute inset-0 rounded-full bg-primary/30 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+        <div className="absolute inset-0 rounded-full bg-primary/20 blur-lg opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
       ) : null}
       
       <motion.button
