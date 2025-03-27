@@ -2,10 +2,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { buttonVariants } from './ui/button';
 
 interface AnimatedButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   children: React.ReactNode;
-  variant?: 'default' | 'outline' | 'ghost' | 'gradient' | 'glass' | 'colorful';
+  variant?: 'default' | 'outline' | 'ghost' | 'gradient' | 'glass' | 'colorful' | 'highlight';
   loading?: boolean;
   icon?: React.ReactNode;
   glowEffect?: boolean;
@@ -23,13 +24,15 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 }) => {
   const baseStyles = "relative inline-flex items-center justify-center rounded-full text-base font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
   
+  // Use class-variance-authority for consistent styling with shadcn/ui
   const variantStyles = {
-    default: "bg-primary text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
-    outline: "border border-primary/20 text-foreground bg-transparent hover:bg-primary/5 shadow-sm px-6 py-3",
-    ghost: "text-foreground hover:bg-primary/10 px-4 py-2",
+    default: buttonVariants({ variant: "default" }),
+    outline: buttonVariants({ variant: "outline" }),
+    ghost: buttonVariants({ variant: "ghost" }),
     gradient: "bg-gradient-to-r from-primary/90 via-secondary to-accent/70 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
     glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-md hover:shadow-lg px-6 py-3",
-    colorful: "bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white shadow-md hover:shadow-lg px-6 py-3 hover:scale-105"
+    colorful: "bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white shadow-md hover:shadow-lg px-6 py-3 hover:scale-105",
+    highlight: buttonVariants({ variant: "highlight" })
   };
   
   // Motion props that are compatible with the component
@@ -48,12 +51,14 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   
   return (
     <div className={`relative ${glowEffect ? 'group' : ''}`}>
-      {glowEffect && (
+      {glowEffect && variant === 'highlight' ? (
+        <div className="absolute inset-0 rounded-full bg-[#8B5CF6]/30 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+      ) : glowEffect ? (
         <div className="absolute inset-0 rounded-full bg-primary/30 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-      )}
+      ) : null}
       
       <motion.button
-        className={cn(baseStyles, variantStyles[variant], className)}
+        className={cn(baseStyles, variant in variantStyles ? variantStyles[variant] : "", className)}
         {...buttonMotionProps}
         disabled={loading || props.disabled}
         // Using type assertion to ensure HTML button props are compatible with motion.button

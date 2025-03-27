@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { File, Link, X, UploadCloud, FileText, FileImage, FileArchive, FileAudio, Sparkles } from 'lucide-react';
@@ -24,7 +23,6 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-resize textarea based on content
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -187,9 +185,10 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                 type="submit" 
                 disabled={!text.trim() || isProcessing} 
                 loading={isProcessing && activeTab === 'text'}
-                variant="gradient"
+                variant="highlight"
+                className="text-base font-semibold px-8 py-3 shadow-xl scale-105 transform hover:scale-110 transition-all duration-300"
                 glowEffect
-                icon={<Sparkles className="w-4 h-4" />}
+                icon={<Sparkles className="w-5 h-5" />}
               >
                 {isProcessing && activeTab === 'text' ? 'Summarizing...' : 'Summarize Text'}
               </AnimatedButton>
@@ -270,9 +269,10 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                     type="submit" 
                     disabled={isProcessing} 
                     loading={isProcessing && activeTab === 'file'}
-                    variant="gradient"
+                    variant="highlight"
+                    className="text-base font-semibold px-8 py-3 shadow-xl scale-105 transform hover:scale-110 transition-all duration-300"
                     glowEffect
-                    icon={<Sparkles className="w-4 h-4" />}
+                    icon={<Sparkles className="w-5 h-5" />}
                   >
                     {isProcessing && activeTab === 'file' ? 'Processing File...' : 'Summarize File Content'}
                   </AnimatedButton>
@@ -306,9 +306,10 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                   type="submit" 
                   disabled={!url.trim() || isProcessing} 
                   loading={isProcessing && activeTab === 'url'}
-                  variant="gradient"
+                  variant="highlight"
+                  className="text-base font-semibold px-8 py-3 shadow-xl scale-105 transform hover:scale-110 transition-all duration-300"
                   glowEffect
-                  icon={<Sparkles className="w-4 h-4" />}
+                  icon={<Sparkles className="w-5 h-5" />}
                 >
                   {isProcessing && activeTab === 'url' ? 'Fetching Content...' : 'Summarize URL Content'}
                 </AnimatedButton>
