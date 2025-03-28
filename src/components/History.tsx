@@ -46,16 +46,16 @@ const History = ({ historyItems, onSelectItem, onClearHistory }: HistoryProps) =
           {historyItems.length > 0 ? (
             <SidebarMenu className="py-0">
               {historyItems.map((item) => (
-                <SidebarMenuItem key={item.id} className="px-2">
+                <SidebarMenuItem key={item.id} className="px-4">
                   <SidebarMenuButton
                     onClick={() => onSelectItem(item.summary)}
                     className={cn(
-                      "flex w-full items-center justify-start gap-3 rounded-md px-3 py-2.5 hover:bg-accent/50 text-sm transition-colors",
+                      "flex w-full items-center justify-center gap-3 rounded-md px-4 py-3 hover:bg-accent/50 text-sm transition-colors",
                       "text-center font-normal"
                     )}
                   >
                     <FileText className="h-4 w-4 text-muted-foreground" />
-                    <div className="flex flex-col items-start">
+                    <div className="flex flex-col items-center">
                       <span className="line-clamp-2 text-sm">{item.title}</span>
                     </div>
                   </SidebarMenuButton>
