@@ -1,5 +1,6 @@
 
 import { SummarizerResponse } from './summarizer';
+import { extractTextFromFile } from './fileService';
 
 // Use a real API base URL - this could be an environment variable in production
 const API_BASE_URL = 'https://api.summarize-matic.com/api';
@@ -52,29 +53,60 @@ export const apiService = {
   
   async summarizeFile(file: File): Promise<ApiResponse<SummarizerResponse>> {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      // First extract the text content from the file
+      const extractedContent = await extractTextFromFile(file);
       
-      const response = await fetch(`${API_BASE_URL}/summarize/file`, {
-        method: 'POST',
-        headers: {
-          'Authorization': headers.Authorization,
-          // Note: Content-Type is automatically set by the browser when using FormData
-        },
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status} ${response.statusText}`);
+      // For file types that we can directly parse (text files), send the content directly
+      if (extractedContent.text) {
+        // Try the API first
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('extractedText', extractedContent.text);
+          formData.append('fileType', extractedContent.fileType);
+          
+          const response = await fetch(`${API_BASE_URL}/summarize/file`, {
+            method: 'POST',
+            headers: {
+              'Authorization': headers.Authorization,
+            },
+            body: formData,
+          });
+          
+          if (!response.ok) {
+            throw new Error(`API error: ${response.status} ${response.statusText}`);
+          }
+          
+          const data = await response.json();
+          return {
+            success: true,
+            data: data as SummarizerResponse,
+          };
+        } catch (apiError) {
+          console.error('Error in API call:', apiError);
+          console.warn('Falling back to extracted text summarization');
+          
+          // Use the extracted text for summarization through the local mock
+          const mockResponse = await import('./summarizer').then(module => 
+            module.summarizeText(extractedContent.text)
+          );
+          
+          return {
+            success: true,
+            data: {
+              ...mockResponse,
+              sourceType: 'file',
+              fileName: extractedContent.fileName,
+              fileType: extractedContent.fileType,
+              metadata: extractedContent.metadata
+            }
+          };
+        }
+      } else {
+        throw new Error(`Could not extract text from file: ${file.name}`);
       }
-      
-      const data = await response.json();
-      return {
-        success: true,
-        data: data as SummarizerResponse,
-      };
     } catch (error) {
-      console.error('Error in API call:', error);
+      console.error('Error processing file:', error);
       
       // Fallback to mock implementation for development/demo purposes
       console.warn('Falling back to mock implementation');
