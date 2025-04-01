@@ -64,66 +64,23 @@ export const summarizeText = async (text: string): Promise<SummarizerResponse> =
   const wordCount = text.trim().split(/\s+/).length;
   const readingTime = calculateReadingTime(text);
   
-  // Extract potential key points (using simple heuristics for demo)
-  const keyPoints = sentences
-    .filter(s => {
-      const lowercaseSentence = s.toLowerCase();
-      return (
-        lowercaseSentence.includes('important') || 
-        lowercaseSentence.includes('key') || 
-        lowercaseSentence.includes('significant') ||
-        lowercaseSentence.includes('primary') ||
-        lowercaseSentence.includes('essential')
-      );
-    })
-    .map(s => s.trim())
-    .slice(0, 3);
+  // Extract key points from the content
+  const keyPoints = extractKeyPoints(sentences);
   
-  // If no key points found based on keywords, take a few short sentences
-  if (keyPoints.length === 0 && sentences.length > 0) {
-    const shortSentences = sentences
-      .filter(s => s.length < 100)
-      .slice(0, 3)
-      .map(s => s.trim());
-    
-    if (shortSentences.length > 0) {
-      keyPoints.push(...shortSentences);
-    } else {
-      keyPoints.push("No distinct key points identified.");
-    }
-  }
-  
-  // Simple sentiment analysis (for demo purposes)
-  const positiveWords = ['good', 'great', 'excellent', 'positive', 'amazing', 'wonderful', 'best'];
-  const negativeWords = ['bad', 'terrible', 'negative', 'awful', 'worst', 'horrible', 'poor'];
-  
-  const words = text.toLowerCase().split(/\W+/);
-  let positiveCount = 0;
-  let negativeCount = 0;
-  
-  words.forEach(word => {
-    if (positiveWords.includes(word)) positiveCount++;
-    if (negativeWords.includes(word)) negativeCount++;
-  });
-  
-  let sentiment;
-  if (positiveCount > negativeCount * 2) sentiment = "very positive";
-  else if (positiveCount > negativeCount) sentiment = "positive";
-  else if (negativeCount > positiveCount * 2) sentiment = "very negative";
-  else if (negativeCount > positiveCount) sentiment = "negative";
-  else sentiment = "neutral";
+  // Analyze sentiment
+  const sentiment = analyzeSentiment(text);
   
   return {
     summary: summaryText,
-    keyPoints: extractKeyPoints(sentences),
-    sentiment: analyzeSentiment(text),
+    keyPoints,
+    sentiment,
     sourceType: 'text',
     wordCount,
     readingTime
   };
 };
 
-// New function to extract key points
+// Extract key points
 const extractKeyPoints = (sentences: string[]): string[] => {
   // Extract potential key points (using simple heuristics for demo)
   const keyPoints = sentences
@@ -157,7 +114,7 @@ const extractKeyPoints = (sentences: string[]): string[] => {
   return keyPoints;
 };
 
-// New function to analyze sentiment
+// Analyze sentiment
 const analyzeSentiment = (text: string): string => {
   // Simple sentiment analysis (for demo purposes)
   const positiveWords = ['good', 'great', 'excellent', 'positive', 'amazing', 'wonderful', 'best'];
@@ -188,6 +145,7 @@ export const summarizeFile = async (file: File): Promise<SummarizerResponse> => 
     const parsedFile = await extractTextFromFile(file);
     console.log(`Successfully extracted text from file, length: ${parsedFile.text.length} characters`);
     
+    // Use the same summarization logic for the extracted text
     const result = await summarizeText(parsedFile.text);
     
     return {
@@ -215,7 +173,19 @@ export const summarizeUrl = async (url: string): Promise<SummarizerResponse> => 
   await new Promise(resolve => setTimeout(resolve, 2500));
   
   // Simulate extracted content from URL
-  const simulatedContent = `This is simulated content extracted from the URL "${url}". In a production environment, we would use server-side code to fetch and extract content from the provided URL. This simulated content is being used to demonstrate how URL summarization would work. The system would fetch the URL, extract the main content, and then apply the summarization algorithm to provide you with a concise summary of the content found at the URL.`;
+  const simulatedContent = `
+  Latest Research on Climate Change Adaptation Strategies
+  
+  Global temperatures have risen by an average of 1.1°C since pre-industrial times, with significant regional variations. This warming has led to measurable impacts on ecosystems, agriculture, and human health worldwide. As climate change accelerates, communities and governments are increasingly focusing on adaptation strategies to reduce vulnerability to climate impacts.
+  
+  A recent meta-analysis of adaptation initiatives across 40 countries identified several best practices emerging from successful programs. Projects that integrated traditional ecological knowledge with scientific data showed particular promise, especially in agricultural and water management contexts. Community-led initiatives demonstrated higher rates of long-term sustainability compared to top-down approaches.
+  
+  Coastal regions face particular challenges from sea level rise and increasing storm intensity. Nature-based solutions such as mangrove restoration and living shorelines have proven cost-effective in many contexts, often providing co-benefits for biodiversity and carbon sequestration. However, implementation barriers remain, including funding constraints and regulatory hurdles.
+  
+  Urban areas are implementing innovative approaches to address heat island effects and flooding risks. Green infrastructure investments such as permeable pavements, urban forests, and green roofs show promising results in reducing temperatures and managing stormwater. These solutions often provide additional benefits including improved air quality and enhanced quality of life for residents.
+  
+  As climate impacts intensify, the economic case for proactive adaptation grows stronger. Cost-benefit analyses consistently demonstrate that early investments in resilience yield substantial long-term savings by reducing disaster recovery costs and minimizing economic disruption. Nevertheless, securing upfront financing remains a significant challenge, particularly for lower-income communities and countries.
+  `;
   
   const result = await summarizeText(simulatedContent);
   

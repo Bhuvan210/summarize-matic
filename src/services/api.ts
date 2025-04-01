@@ -1,4 +1,3 @@
-
 import { SummarizerResponse } from './summarizer';
 import { extractTextFromFile } from './fileService';
 
@@ -116,14 +115,10 @@ export const apiService = {
     } catch (error) {
       console.error('Error processing file:', error);
       
-      // Fallback to mock implementation for development/demo purposes
-      console.warn('Falling back to mock implementation');
-      const { summarizeFile } = await import('./summarizer');
-      const mockResponse = await summarizeFile(file);
-      
+      // In case of failure, return an error message
       return {
-        success: true,
-        data: mockResponse,
+        success: false,
+        error: `Failed to process file: ${error instanceof Error ? error.message : String(error)}`
       };
     }
   },
@@ -158,7 +153,7 @@ export const apiService = {
       };
     }
   },
-
+  
   async shareViaSocialMedia(platform: string, content: { title: string; text: string; url?: string }): Promise<ApiResponse<{ success: boolean }>> {
     try {
       const response = await fetch(`${API_BASE_URL}/share/${platform}`, {
