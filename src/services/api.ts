@@ -53,10 +53,19 @@ export const apiService = {
   
   async summarizeFile(file: File): Promise<ApiResponse<SummarizerResponse>> {
     try {
+      console.log('Processing file:', file.name, file.type);
+      
       // First extract the text content from the file
       const extractedContent = await extractTextFromFile(file);
       
-      // For file types that we can directly parse (text files), send the content directly
+      console.log('Extracted content:', {
+        fileName: extractedContent.fileName,
+        fileType: extractedContent.fileType,
+        textLength: extractedContent.text.length,
+        textSample: extractedContent.text.substring(0, 100) + '...'
+      });
+      
+      // For file types that we can extract text from, process the content
       if (extractedContent.text) {
         // Try the API first
         try {
@@ -87,9 +96,8 @@ export const apiService = {
           console.warn('Falling back to extracted text summarization');
           
           // Use the extracted text for summarization through the local mock
-          const mockResponse = await import('./summarizer').then(module => 
-            module.summarizeText(extractedContent.text)
-          );
+          const { summarizeText } = await import('./summarizer');
+          const mockResponse = await summarizeText(extractedContent.text);
           
           return {
             success: true,
@@ -110,7 +118,8 @@ export const apiService = {
       
       // Fallback to mock implementation for development/demo purposes
       console.warn('Falling back to mock implementation');
-      const mockResponse = await import('./summarizer').then(module => module.summarizeFile(file));
+      const { summarizeFile } = await import('./summarizer');
+      const mockResponse = await summarizeFile(file);
       
       return {
         success: true,

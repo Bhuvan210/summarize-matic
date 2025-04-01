@@ -14,23 +14,29 @@ export interface ParsedFileContent {
  * Extracts text content from various file types
  */
 export const extractTextFromFile = async (file: File): Promise<ParsedFileContent> => {
+  console.log(`Starting text extraction from file: ${file.name} (${file.type})`);
   const fileName = file.name;
   const fileType = file.type;
   
   // Text files
   if (fileType.includes('text/plain')) {
+    console.log('Processing text file...');
     const text = await file.text();
+    console.log(`Extracted ${text.length} characters from text file`);
     return { text, fileType, fileName };
   }
   
   // PDF files
   if (fileType.includes('application/pdf')) {
     try {
+      console.log('Processing PDF file...');
       // In a real implementation, we would use a library like pdf.js
       // Here we'll try to extract text directly, but in a production app
       // you would want to use a proper PDF parsing library
       const arrayBuffer = await file.arrayBuffer();
       const text = await extractTextFromPDF(arrayBuffer);
+      
+      console.log(`Extracted ${text.length} characters from PDF`);
       
       return { 
         text: text || `This is simulated text extracted from the PDF file "${fileName}". In a production environment, we would use proper PDF parsing libraries to extract the text content accurately.`,
@@ -57,10 +63,13 @@ export const extractTextFromFile = async (file: File): Promise<ParsedFileContent
   if (fileType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document') || 
       fileType.includes('application/msword')) {
     try {
+      console.log('Processing Word document...');
       // In a real implementation, we would use a library for Word documents
       // Simulate Word document parsing
       const arrayBuffer = await file.arrayBuffer();
       const text = await extractTextFromDOC(arrayBuffer, fileType);
+      
+      console.log(`Extracted ${text.length} characters from Word document`);
       
       return { 
         text: text || `This is simulated text extracted from the Word document "${fileName}". In a production environment, we would use proper document parsing libraries to extract the text content accurately.`,
@@ -86,10 +95,13 @@ export const extractTextFromFile = async (file: File): Promise<ParsedFileContent
   // Images (OCR simulation)
   if (fileType.includes('image/')) {
     try {
+      console.log('Processing image with OCR...');
       // In a real implementation, we would use an OCR service
       // Simulate OCR processing
       const arrayBuffer = await file.arrayBuffer();
       const text = await extractTextFromImage(arrayBuffer, fileType);
+      
+      console.log(`Extracted ${text.length} characters from image via OCR`);
       
       return { 
         text: text || `This is simulated text extracted via OCR from the image "${fileName}". In a production environment, we would use proper OCR services or libraries to extract the text content from the image.`,
@@ -111,6 +123,7 @@ export const extractTextFromFile = async (file: File): Promise<ParsedFileContent
   }
   
   // Default fallback
+  console.warn(`Unsupported file type: ${fileType}`);
   return { 
     text: `Unable to extract text from this file type (${fileType}). Please try a supported file format.`,
     fileType, 

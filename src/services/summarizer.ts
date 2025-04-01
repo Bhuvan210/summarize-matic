@@ -23,6 +23,8 @@ const calculateReadingTime = (text: string): string => {
 };
 
 export const summarizeText = async (text: string): Promise<SummarizerResponse> => {
+  console.log(`Summarizing text of length: ${text.length} characters`);
+  
   // Simulate API call with delay
   await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -31,6 +33,7 @@ export const summarizeText = async (text: string): Promise<SummarizerResponse> =
   
   // Simple algorithm to extract important sentences
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+  console.log(`Found ${sentences.length} sentences in the text`);
   
   // Take first sentence, one from middle, and last sentence for a crude summary
   let summaryText = '';
@@ -112,17 +115,79 @@ export const summarizeText = async (text: string): Promise<SummarizerResponse> =
   
   return {
     summary: summaryText,
-    keyPoints,
-    sentiment,
+    keyPoints: extractKeyPoints(sentences),
+    sentiment: analyzeSentiment(text),
     sourceType: 'text',
     wordCount,
     readingTime
   };
 };
 
+// New function to extract key points
+const extractKeyPoints = (sentences: string[]): string[] => {
+  // Extract potential key points (using simple heuristics for demo)
+  const keyPoints = sentences
+    .filter(s => {
+      const lowercaseSentence = s.toLowerCase();
+      return (
+        lowercaseSentence.includes('important') || 
+        lowercaseSentence.includes('key') || 
+        lowercaseSentence.includes('significant') ||
+        lowercaseSentence.includes('primary') ||
+        lowercaseSentence.includes('essential')
+      );
+    })
+    .map(s => s.trim())
+    .slice(0, 3);
+  
+  // If no key points found based on keywords, take a few short sentences
+  if (keyPoints.length === 0 && sentences.length > 0) {
+    const shortSentences = sentences
+      .filter(s => s.length < 100)
+      .slice(0, 3)
+      .map(s => s.trim());
+    
+    if (shortSentences.length > 0) {
+      keyPoints.push(...shortSentences);
+    } else {
+      keyPoints.push("No distinct key points identified.");
+    }
+  }
+  
+  return keyPoints;
+};
+
+// New function to analyze sentiment
+const analyzeSentiment = (text: string): string => {
+  // Simple sentiment analysis (for demo purposes)
+  const positiveWords = ['good', 'great', 'excellent', 'positive', 'amazing', 'wonderful', 'best'];
+  const negativeWords = ['bad', 'terrible', 'negative', 'awful', 'worst', 'horrible', 'poor'];
+  
+  const words = text.toLowerCase().split(/\W+/);
+  let positiveCount = 0;
+  let negativeCount = 0;
+  
+  words.forEach(word => {
+    if (positiveWords.includes(word)) positiveCount++;
+    if (negativeWords.includes(word)) negativeCount++;
+  });
+  
+  let sentiment;
+  if (positiveCount > negativeCount * 2) sentiment = "very positive";
+  else if (positiveCount > negativeCount) sentiment = "positive";
+  else if (negativeCount > positiveCount * 2) sentiment = "very negative";
+  else if (negativeCount > positiveCount) sentiment = "negative";
+  else sentiment = "neutral";
+  
+  return sentiment;
+};
+
 export const summarizeFile = async (file: File): Promise<SummarizerResponse> => {
+  console.log(`Summarizing file: ${file.name} (${file.type})`);
   try {
     const parsedFile = await extractTextFromFile(file);
+    console.log(`Successfully extracted text from file, length: ${parsedFile.text.length} characters`);
+    
     const result = await summarizeText(parsedFile.text);
     
     return {
