@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -13,13 +12,13 @@ import { toast } from '@/components/ui/use-toast';
 import AuthButton from '@/components/AuthButton';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const generateId = () => `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
 type HistoryItem = {
   id: string;
   title: string;
   summary: SummarizerResponse;
 };
+
+const generateId = () => `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 const Index = () => {
   const [inputText, setInputText] = useState('');
@@ -27,6 +26,7 @@ const Index = () => {
   const [result, setResult] = useState<SummarizerResponse | null>(null);
   const [processingType, setProcessingType] = useState<'text' | 'file' | 'url'>('text');
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -170,19 +170,45 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex flex-col bg-[#0A1628]">
+      <div className="min-h-screen flex flex-col deep-blue-bg">
         <div className="absolute top-2 sm:top-4 right-3 sm:right-6 z-50">
           <AuthButton />
         </div>
 
         <div className="flex flex-1 h-screen overflow-hidden">
-          <div className={`${isMobile ? 'hidden' : 'block'} w-64 border-r border-white/5`}>
+          <div className={`${isMobile ? (sidebarOpen ? 'block absolute z-40 h-full' : 'hidden') : 'block'} w-64 border-r border-white/5 bg-[#0A1628]`}>
             <History 
               historyItems={history} 
               onSelectItem={handleSelectHistoryItem} 
               onClearHistory={handleClearHistory} 
             />
           </div>
+
+          {isMobile && (
+            <button 
+              className="fixed bottom-4 left-4 z-50 p-3 bg-[#171F2F] rounded-full border border-white/10 shadow-lg"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {sidebarOpen ? (
+                  <path d="M18 6L6 18M6 6l12 12" />
+                ) : (
+                  <>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                  </>
+                )}
+              </svg>
+            </button>
+          )}
+
+          {isMobile && sidebarOpen && (
+            <div 
+              className="fixed inset-0 bg-black/50 z-30"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
 
           <main className="flex-grow mx-auto pb-8 sm:pb-12 overflow-y-auto w-full max-w-4xl">
             <HeroSection />
