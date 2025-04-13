@@ -22,16 +22,16 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   glowEffect = false,
   ...props 
 }) => {
-  const baseStyles = "relative inline-flex items-center justify-center rounded-full text-base font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  const baseStyles = "relative inline-flex items-center justify-center text-sm font-medium transition-all duration-300 focus:outline-none disabled:pointer-events-none disabled:opacity-50";
   
   // Use class-variance-authority for consistent styling with shadcn/ui
   const variantStyles = {
     default: buttonVariants({ variant: "default" }),
     outline: buttonVariants({ variant: "outline" }),
     ghost: buttonVariants({ variant: "ghost" }),
-    gradient: "bg-gradient-to-r from-primary/80 via-[#A48FFF]/70 to-[#BEB6FF]/60 text-primary-foreground shadow-sm hover:shadow-md px-6 py-3",
-    glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-sm hover:shadow-md px-6 py-3",
-    colorful: "bg-gradient-to-r from-primary/90 via-[#A48FFF]/80 to-[#BEB6FF]/70 text-white shadow-sm hover:shadow-md px-6 py-3 hover:scale-105",
+    gradient: "bg-gradient-to-r from-primary/80 via-[#A48FFF]/70 to-[#BEB6FF]/60 text-primary-foreground shadow-sm hover:shadow-md px-4 py-2",
+    glass: "backdrop-blur-md bg-white/10 border border-white/20 text-primary-foreground shadow-sm hover:shadow-md px-4 py-2",
+    colorful: "bg-gradient-to-r from-primary/90 via-[#A48FFF]/80 to-[#BEB6FF]/70 text-white shadow-sm hover:shadow-md px-4 py-2 hover:scale-105",
     highlight: buttonVariants({ variant: "highlight" })
   };
   
@@ -39,8 +39,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   const buttonMotionProps = {
     whileTap: { scale: 0.98 },
     whileHover: { scale: 1.02 },
-    initial: { y: 10, opacity: 0 },
-    animate: { y: 0, opacity: 1 },
+    initial: { y: 0, opacity: 1 },
     transition: { 
       type: "spring", 
       stiffness: 500, 
@@ -67,7 +66,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
         {loading ? (
           <span className="flex items-center justify-center">
             <svg 
-              className="animate-spin -ml-1 mr-2 h-4 w-4 text-current" 
+              className="animate-spin -ml-1 mr-2 h-3.5 w-3.5 text-current" 
               xmlns="http://www.w3.org/2000/svg" 
               fill="none" 
               viewBox="0 0 24 24"
@@ -91,7 +90,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
         ) : (
           <>
             {children}
-            {icon && <span className="ml-2">{icon}</span>}
+            {icon && <span className="ml-1.5">{icon}</span>}
           </>
         )}
       </motion.button>

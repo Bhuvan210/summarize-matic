@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -165,89 +166,10 @@ const Index = () => {
     setInputText('');
   };
 
-  const particles = Array.from({ length: 25 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 30 + 5,
-    duration: Math.random() * 25 + 15,
-    color: i % 5 === 0 ? 'primary' : 
-           i % 5 === 1 ? 'secondary' : 
-           i % 5 === 2 ? 'accent' : 
-           i % 5 === 3 ? 'purple-500' : 'pink-400'
-  }));
-
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-secondary/10 to-background">
-        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
-          <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-accent/15 via-transparent to-transparent" />
-          
-          {particles.map(particle => (
-            <motion.div 
-              key={particle.id}
-              className={`absolute rounded-full bg-${particle.color}/20 blur-3xl`}
-              style={{ 
-                left: `${particle.x}%`, 
-                top: `${particle.y}%`,
-                width: `${particle.size}px`,
-                height: `${particle.size}px`,
-              }}
-              animate={{ 
-                x: [0, Math.random() * 40 - 20, 0], 
-                y: [0, Math.random() * 40 - 20, 0],
-                opacity: [0.2, Math.random() * 0.4 + 0.2, 0.2]
-              }}
-              transition={{ 
-                duration: particle.duration, 
-                repeat: Infinity,
-                ease: "easeInOut" 
-              }}
-            />
-          ))}
-          
-          <motion.div 
-            className="absolute top-48 -left-24 w-64 h-64 rounded-full bg-primary/10 blur-3xl"
-            animate={{ 
-              x: [0, 20, 0], 
-              y: [0, 15, 0],
-            }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity,
-              ease: "easeInOut" 
-            }}
-          />
-          
-          <motion.div 
-            className="absolute bottom-32 -right-32 w-96 h-96 rounded-full bg-secondary/15 blur-3xl"
-            animate={{ 
-              x: [0, -30, 0], 
-              y: [0, -25, 0],
-            }}
-            transition={{ 
-              duration: 12, 
-              repeat: Infinity,
-              ease: "easeInOut" 
-            }}
-          />
-          
-          <motion.div 
-            className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full bg-accent/10 blur-3xl"
-            animate={{ 
-              x: [0, 25, 0], 
-              y: [0, -20, 0],
-            }}
-            transition={{ 
-              duration: 15, 
-              repeat: Infinity,
-              ease: "easeInOut" 
-            }}
-          />
-        </div>
-
-        <div className="absolute top-4 right-24 z-50">
+      <div className="min-h-screen flex flex-col deep-blue-bg">
+        <div className="absolute top-4 right-6 z-50">
           <AuthButton />
         </div>
 
@@ -260,7 +182,7 @@ const Index = () => {
             />
           </div>
 
-          <main className="flex-grow container mx-auto px-4 pb-20 overflow-y-auto">
+          <main className="flex-grow container mx-auto px-4 pb-12 overflow-y-auto">
             <HeroSection />
             
             <AnimatePresence mode="wait">
@@ -294,7 +216,7 @@ const Index = () => {
 
             {isProcessing && (
               <motion.div 
-                className="flex justify-center mt-12"
+                className="flex justify-center mt-8"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
@@ -311,20 +233,20 @@ const Index = () => {
           </main>
         </div>
 
-        <footer className="py-6 glass-bg border-t border-primary/10">
+        <footer className="py-4 border-t border-white/10">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-white/60">
                 Designed with precision and care
               </p>
-              <div className="flex items-center space-x-4 mt-4 md:mt-0">
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              <div className="flex items-center space-x-6 mt-3 md:mt-0">
+                <a href="#" className="text-xs text-white/60 hover:text-white transition-colors">
                   About
                 </a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <a href="#" className="text-xs text-white/60 hover:text-white transition-colors">
                   Privacy
                 </a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <a href="#" className="text-xs text-white/60 hover:text-white transition-colors">
                   Terms
                 </a>
               </div>

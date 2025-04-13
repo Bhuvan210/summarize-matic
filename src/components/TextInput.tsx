@@ -1,8 +1,10 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { File, Link, X, UploadCloud, FileText, FileImage, FileArchive, FileAudio, Sparkles } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import AnimatedButton from './AnimatedButton';
 
 interface TextInputProps {
@@ -26,7 +28,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.max(200, textareaRef.current.scrollHeight)}px`;
+      textareaRef.current.style.height = `${Math.max(120, textareaRef.current.scrollHeight)}px`;
     }
   }, [text]);
 
@@ -57,7 +59,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
     
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.max(200, textareaRef.current.scrollHeight)}px`;
+      textareaRef.current.style.height = `${Math.max(120, textareaRef.current.scrollHeight)}px`;
     }
   };
 
@@ -108,7 +110,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
 
   return (
     <motion.div
-      className="w-full max-w-4xl mx-auto"
+      className="w-full max-w-2xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
@@ -119,17 +121,17 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <div className="flex justify-center mb-6">
-            <TabsList className="grid grid-cols-3 w-full max-w-md">
-              <TabsTrigger value="text" className="flex items-center gap-2 px-6">
+          <div className="flex justify-center mb-2">
+            <TabsList className="grid grid-cols-3 w-full bg-white/5 p-0.5">
+              <TabsTrigger value="text" className="flex items-center gap-2 py-2">
                 <FileText className="w-4 h-4" />
                 Text
               </TabsTrigger>
-              <TabsTrigger value="file" className="flex items-center gap-2 px-6">
+              <TabsTrigger value="file" className="flex items-center gap-2 py-2">
                 <File className="w-4 h-4" />
                 File
               </TabsTrigger>
-              <TabsTrigger value="url" className="flex items-center gap-2 px-6">
+              <TabsTrigger value="url" className="flex items-center gap-2 py-2">
                 <Link className="w-4 h-4" />
                 URL
               </TabsTrigger>
@@ -137,39 +139,22 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
           </div>
 
           <TabsContent value="text" className="mt-0">
-            <motion.div 
-              className={`relative rounded-2xl overflow-hidden transition-shadow duration-300 ${
-                isFocused ? 'shadow-lg ring-2 ring-primary/20' : 'shadow-md'
-              }`}
-              whileHover={{ scale: 1.005 }}
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            >
-              <textarea
+            <div className="input-container">
+              <Textarea
                 ref={textareaRef}
                 value={text}
                 onChange={handleChange}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 placeholder="Paste your text here to summarize..."
-                className="w-full p-6 text-input text-base resize-none bg-card text-card-foreground focus:outline-none"
-                rows={8}
+                className="bg-transparent border-0 p-0 focus-visible:ring-0 placeholder:text-white/40"
+                id="text-input"
                 disabled={isProcessing}
               />
-              
-              <AnimatePresence>
-                {isFocused && (
-                  <motion.div 
-                    className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-card to-transparent h-10 pointer-events-none"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  />
-                )}
-              </AnimatePresence>
-            </motion.div>
+            </div>
             
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
-              <div className="flex items-center text-sm text-muted-foreground">
+              <div className="flex items-center text-sm text-white/60">
                 <span>{charCount} characters</span>
                 <span className="mx-2">•</span>
                 <button 
@@ -185,20 +170,18 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                 type="submit" 
                 disabled={!text.trim() || isProcessing} 
                 loading={isProcessing && activeTab === 'text'}
-                variant="highlight"
-                className="text-base font-semibold px-8 py-3 shadow-xl scale-105 transform hover:scale-110 transition-all duration-300"
-                glowEffect
-                icon={<Sparkles className="w-5 h-5" />}
+                className="bg-primary/90 hover:bg-primary text-white text-sm font-medium px-6 py-2 rounded-full shadow-lg"
+                icon={<Sparkles className="w-4 h-4" />}
               >
-                {isProcessing && activeTab === 'text' ? 'Summarizing...' : 'Summarize Text'}
+                {isProcessing && activeTab === 'text' ? 'Summarizing...' : 'Summarize'}
               </AnimatedButton>
             </div>
           </TabsContent>
 
           <TabsContent value="file" className="mt-0">
             <div 
-              className={`border-2 border-dashed rounded-2xl p-10 text-center transition-colors duration-300 ${
-                dragActive ? 'border-primary bg-primary/5' : 'border-border'
+              className={`border border-dashed rounded-lg p-8 text-center transition-colors duration-300 ${
+                dragActive ? 'border-primary bg-primary/5' : 'border-white/20 bg-white/5'
               }`}
               onDragEnter={handleDrag}
               onDragOver={handleDrag}
@@ -208,15 +191,15 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
               {!selectedFile ? (
                 <div className="flex flex-col items-center justify-center gap-4">
                   <motion.div 
-                    className="p-4 rounded-full bg-primary/10 text-primary"
+                    className="p-3 rounded-full bg-primary/10 text-primary"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <UploadCloud className="w-10 h-10" />
+                    <UploadCloud className="w-8 h-8" />
                   </motion.div>
                   <div>
-                    <h3 className="text-lg font-medium mb-1">Drop your file here</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <h3 className="text-base font-medium mb-1">Drop your file here</h3>
+                    <p className="text-sm text-white/60 mb-4">
                       Supports TXT, PDF, DOCX, and images (for OCR)
                     </p>
                     <input
@@ -232,6 +215,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isProcessing}
                       variant="outline"
+                      className="bg-white/10 hover:bg-white/15 border-white/20 text-white text-sm"
                     >
                       Browse Files
                     </AnimatedButton>
@@ -240,25 +224,25 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
               ) : (
                 <div className="flex flex-col items-center gap-4">
                   <motion.div 
-                    className="flex items-center gap-3 p-4 bg-card rounded-xl shadow-sm"
+                    className="flex items-center gap-3 p-3 bg-white/10 rounded-lg"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
-                    <div className="p-3 rounded-full bg-primary/10 text-primary">
+                    <div className="p-2 rounded-full bg-primary/10 text-primary">
                       {getFileIcon(selectedFile.type)}
                     </div>
                     <div className="flex-1 text-left">
-                      <p className="font-medium truncate" style={{ maxWidth: '250px' }}>
+                      <p className="font-medium truncate" style={{ maxWidth: '200px' }}>
                         {selectedFile.name}
                       </p>
-                      <p className="text-xs text-muted-foreground">
-                        {(selectedFile.size / 1024).toFixed(1)} KB • {selectedFile.type || 'Unknown type'}
+                      <p className="text-xs text-white/60">
+                        {(selectedFile.size / 1024).toFixed(1)} KB
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={handleFileClear}
-                      className="p-2 hover:bg-muted rounded-full"
+                      className="p-1.5 hover:bg-white/10 rounded-full"
                       disabled={isProcessing}
                     >
                       <X className="w-4 h-4" />
@@ -269,12 +253,10 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                     type="submit" 
                     disabled={isProcessing} 
                     loading={isProcessing && activeTab === 'file'}
-                    variant="highlight"
-                    className="text-base font-semibold px-8 py-3 shadow-xl scale-105 transform hover:scale-110 transition-all duration-300"
-                    glowEffect
-                    icon={<Sparkles className="w-5 h-5" />}
+                    className="bg-primary/90 hover:bg-primary text-white text-sm font-medium px-6 py-2 rounded-full shadow-lg"
+                    icon={<Sparkles className="w-4 h-4" />}
                   >
-                    {isProcessing && activeTab === 'file' ? 'Processing File...' : 'Summarize File Content'}
+                    {isProcessing && activeTab === 'file' ? 'Processing...' : 'Summarize File'}
                   </AnimatedButton>
                 </div>
               )}
@@ -282,9 +264,9 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
           </TabsContent>
 
           <TabsContent value="url" className="mt-0">
-            <div className="space-y-4">
+            <div className="input-container space-y-4">
               <div className="space-y-2">
-                <label htmlFor="url-input" className="text-sm font-medium">
+                <label htmlFor="url-input" className="text-sm font-medium text-white/80">
                   Enter URL to Summarize
                 </label>
                 <Input
@@ -293,11 +275,11 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                   placeholder="https://example.com/article"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  className="h-12"
+                  className="h-10 bg-transparent border-white/20 focus-visible:ring-primary/40"
                   disabled={isProcessing}
                 />
-                <p className="text-xs text-muted-foreground">
-                  Paste a URL to an article, blog post, or any web page with text content
+                <p className="text-xs text-white/60">
+                  Paste a URL to an article, blog post, or any web page
                 </p>
               </div>
               
@@ -306,12 +288,10 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                   type="submit" 
                   disabled={!url.trim() || isProcessing} 
                   loading={isProcessing && activeTab === 'url'}
-                  variant="highlight"
-                  className="text-base font-semibold px-8 py-3 shadow-xl scale-105 transform hover:scale-110 transition-all duration-300"
-                  glowEffect
-                  icon={<Sparkles className="w-5 h-5" />}
+                  className="bg-primary/90 hover:bg-primary text-white text-sm font-medium px-6 py-2 rounded-full shadow-lg"
+                  icon={<Sparkles className="w-4 h-4" />}
                 >
-                  {isProcessing && activeTab === 'url' ? 'Fetching Content...' : 'Summarize URL Content'}
+                  {isProcessing && activeTab === 'url' ? 'Processing...' : 'Summarize URL'}
                 </AnimatedButton>
               </div>
             </div>
