@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { File, Link, X, UploadCloud, FileText, FileImage, FileArchive, FileAudio, Sparkles } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -17,7 +17,6 @@ interface TextInputProps {
 const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubmit, isProcessing }) => {
   const [text, setText] = useState('');
   const [charCount, setCharCount] = useState(0);
-  const [isFocused, setIsFocused] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('text');
   const [url, setUrl] = useState('');
   const [dragActive, setDragActive] = useState(false);
@@ -121,8 +120,8 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <div className="flex justify-center mb-2">
-            <TabsList className="grid grid-cols-3 w-full bg-white/5 p-0.5">
+          <div className="flex justify-center mb-4">
+            <TabsList className="grid grid-cols-3 w-full max-w-xs bg-[#171F2F]/80 p-0.5">
               <TabsTrigger value="text" className="flex items-center gap-2 py-2">
                 <FileText className="w-4 h-4" />
                 Text
@@ -139,13 +138,11 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
           </div>
 
           <TabsContent value="text" className="mt-0">
-            <div className="input-container">
+            <div className="bg-[#171F2F]/50 border border-white/5 rounded-lg p-4">
               <Textarea
                 ref={textareaRef}
                 value={text}
                 onChange={handleChange}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
                 placeholder="Paste your text here to summarize..."
                 className="bg-transparent border-0 p-0 focus-visible:ring-0 placeholder:text-white/40"
                 id="text-input"
@@ -170,10 +167,10 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                 type="submit" 
                 disabled={!text.trim() || isProcessing} 
                 loading={isProcessing && activeTab === 'text'}
-                className="bg-primary/90 hover:bg-primary text-white text-sm font-medium px-6 py-2 rounded-full shadow-lg"
+                className="bg-primary text-white text-sm font-medium px-8 py-2.5 rounded-full shadow-lg"
                 icon={<Sparkles className="w-4 h-4" />}
               >
-                {isProcessing && activeTab === 'text' ? 'Summarizing...' : 'Summarize'}
+                {isProcessing && activeTab === 'text' ? 'Summarizing...' : 'Summarize Text'}
               </AnimatedButton>
             </div>
           </TabsContent>
@@ -181,7 +178,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
           <TabsContent value="file" className="mt-0">
             <div 
               className={`border border-dashed rounded-lg p-8 text-center transition-colors duration-300 ${
-                dragActive ? 'border-primary bg-primary/5' : 'border-white/20 bg-white/5'
+                dragActive ? 'border-primary bg-primary/5' : 'border-white/20 bg-[#171F2F]/50'
               }`}
               onDragEnter={handleDrag}
               onDragOver={handleDrag}
@@ -224,7 +221,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
               ) : (
                 <div className="flex flex-col items-center gap-4">
                   <motion.div 
-                    className="flex items-center gap-3 p-3 bg-white/10 rounded-lg"
+                    className="flex items-center gap-3 p-3 bg-white/10 rounded-lg w-full max-w-md"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
@@ -253,7 +250,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                     type="submit" 
                     disabled={isProcessing} 
                     loading={isProcessing && activeTab === 'file'}
-                    className="bg-primary/90 hover:bg-primary text-white text-sm font-medium px-6 py-2 rounded-full shadow-lg"
+                    className="bg-primary text-white text-sm font-medium px-8 py-2.5 rounded-full shadow-lg"
                     icon={<Sparkles className="w-4 h-4" />}
                   >
                     {isProcessing && activeTab === 'file' ? 'Processing...' : 'Summarize File'}
@@ -264,7 +261,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
           </TabsContent>
 
           <TabsContent value="url" className="mt-0">
-            <div className="input-container space-y-4">
+            <div className="bg-[#171F2F]/50 border border-white/5 rounded-lg p-4 space-y-4">
               <div className="space-y-2">
                 <label htmlFor="url-input" className="text-sm font-medium text-white/80">
                   Enter URL to Summarize
@@ -288,7 +285,7 @@ const TextInput: React.FC<TextInputProps> = ({ onSubmit, onFileSubmit, onUrlSubm
                   type="submit" 
                   disabled={!url.trim() || isProcessing} 
                   loading={isProcessing && activeTab === 'url'}
-                  className="bg-primary/90 hover:bg-primary text-white text-sm font-medium px-6 py-2 rounded-full shadow-lg"
+                  className="bg-primary text-white text-sm font-medium px-8 py-2.5 rounded-full shadow-lg"
                   icon={<Sparkles className="w-4 h-4" />}
                 >
                   {isProcessing && activeTab === 'url' ? 'Processing...' : 'Summarize URL'}

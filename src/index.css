@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 215 60% 20%;
+    --background: 213 78% 9%;
     --foreground: 210 20% 98%;
 
     --card: 215 60% 20%;
@@ -37,7 +37,7 @@
   }
 
   .dark {
-    --background: 215 60% 20%;
+    --background: 213 78% 9%;
     --foreground: 210 20% 98%;
 
     --card: 215 60% 20%;
@@ -138,16 +138,16 @@
   }
   
   .deep-blue-bg {
-    background-color: #0d3669;
-    background-image: linear-gradient(180deg, #0d3669 0%, #072347 100%);
+    background-color: #0A1628;
+    background-image: linear-gradient(180deg, #0A1628 0%, #0A1220 100%);
   }
   
   .feature-badge {
-    @apply bg-primary/20 text-foreground px-4 py-2 rounded-full text-sm font-medium border border-primary/30;
+    @apply bg-[#171F2F]/80 text-foreground px-3 py-1.5 rounded-full text-xs font-medium border border-white/5;
   }
   
   .input-container {
-    @apply bg-white/5 border border-white/10 rounded-lg p-4;
+    @apply bg-[#171F2F]/50 border border-white/5 rounded-lg p-4;
   }
 }
 
@@ -180,4 +180,26 @@
 @keyframes shimmer {
   0% { background-position: -500px 0; }
   100% { background-position: 500px 0; }
+}
+
+/* Improved mobile responsiveness */
+@media (max-width: 640px) {
+  .feature-badge {
+    @apply px-2 py-1 text-xs;
+  }
+  
+  .input-container {
+    @apply p-3;
+  }
+}
+
+/* Make sure text is more legible on small screens */
+@media (max-width: 480px) {
+  h1 {
+    @apply text-2xl;
+  }
+  
+  p {
+    @apply text-sm;
+  }
 }

@@ -7,14 +7,14 @@ import AnimatedButton from '@/components/AnimatedButton';
 const HeroSection: React.FC = () => {
   return (
     <motion.div 
-      className="flex flex-col items-center justify-center pt-12 pb-8 md:pt-16 md:pb-12 px-6 text-center"
+      className="flex flex-col items-center justify-center pt-10 pb-6 md:pt-16 md:pb-10 px-4 text-center max-w-3xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
     >
       {/* Badge with subtle styling */}
       <motion.div 
-        className="inline-flex items-center justify-center mb-5 px-4 py-1.5 bg-primary/10 text-foreground rounded-full border border-primary/20"
+        className="inline-flex items-center justify-center mb-5 px-3 py-1 bg-primary/10 text-foreground rounded-full border border-primary/20"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
@@ -68,7 +68,7 @@ const HeroSection: React.FC = () => {
       
       {/* Feature badges with more subtle styling */}
       <motion.div
-        className="flex flex-wrap justify-center gap-3 mt-1"
+        className="flex flex-wrap justify-center gap-2 mt-1"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}

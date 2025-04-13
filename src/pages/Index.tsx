@@ -11,6 +11,7 @@ import { SummarizerResponse } from '@/services/summarizer';
 import { apiService } from '@/services/api';
 import { toast } from '@/components/ui/use-toast';
 import AuthButton from '@/components/AuthButton';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const generateId = () => `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -26,6 +27,7 @@ const Index = () => {
   const [result, setResult] = useState<SummarizerResponse | null>(null);
   const [processingType, setProcessingType] = useState<'text' | 'file' | 'url'>('text');
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const savedHistory = localStorage.getItem('summaryHistory');
@@ -168,13 +170,13 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex flex-col deep-blue-bg">
+      <div className="min-h-screen flex flex-col bg-[#0A1628]">
         <div className="absolute top-4 right-6 z-50">
           <AuthButton />
         </div>
 
         <div className="flex flex-1 h-screen overflow-hidden">
-          <div className="hidden md:block w-72">
+          <div className={`${isMobile ? 'hidden' : 'block'} w-64 border-r border-white/5`}>
             <History 
               historyItems={history} 
               onSelectItem={handleSelectHistoryItem} 
@@ -182,7 +184,7 @@ const Index = () => {
             />
           </div>
 
-          <main className="flex-grow container mx-auto px-4 pb-12 overflow-y-auto">
+          <main className="flex-grow mx-auto pb-12 overflow-y-auto w-full max-w-4xl">
             <HeroSection />
             
             <AnimatePresence mode="wait">
@@ -193,6 +195,7 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
+                  className="px-4 md:px-6"
                 >
                   <TextInput 
                     onSubmit={handleTextSubmit} 
@@ -208,6 +211,7 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
+                  className="px-4 md:px-6"
                 >
                   <SummaryResult summary={result} onReset={handleReset} />
                 </motion.div>
@@ -233,7 +237,7 @@ const Index = () => {
           </main>
         </div>
 
-        <footer className="py-4 border-t border-white/10">
+        <footer className="py-4 border-t border-white/5">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-xs text-white/60">
