@@ -171,7 +171,7 @@ const Index = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex flex-col bg-[#0A1628]">
-        <div className="absolute top-4 right-6 z-50">
+        <div className="absolute top-2 sm:top-4 right-3 sm:right-6 z-50">
           <AuthButton />
         </div>
 
@@ -184,7 +184,7 @@ const Index = () => {
             />
           </div>
 
-          <main className="flex-grow mx-auto pb-12 overflow-y-auto w-full max-w-4xl">
+          <main className="flex-grow mx-auto pb-8 sm:pb-12 overflow-y-auto w-full max-w-4xl">
             <HeroSection />
             
             <AnimatePresence mode="wait">
@@ -195,7 +195,7 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="px-4 md:px-6"
+                  className="px-3 sm:px-4 md:px-6"
                 >
                   <TextInput 
                     onSubmit={handleTextSubmit} 
@@ -211,7 +211,7 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="px-4 md:px-6"
+                  className="px-3 sm:px-4 md:px-6"
                 >
                   <SummaryResult summary={result} onReset={handleReset} />
                 </motion.div>
@@ -220,7 +220,7 @@ const Index = () => {
 
             {isProcessing && (
               <motion.div 
-                className="flex justify-center mt-8"
+                className="flex justify-center mt-6 sm:mt-8"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
@@ -237,13 +237,13 @@ const Index = () => {
           </main>
         </div>
 
-        <footer className="py-4 border-t border-white/5">
-          <div className="container mx-auto px-4">
+        <footer className="py-3 sm:py-4 border-t border-white/5">
+          <div className="container mx-auto px-3 sm:px-4">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-xs text-white/60">
                 Designed with precision and care
               </p>
-              <div className="flex items-center space-x-6 mt-3 md:mt-0">
+              <div className="flex items-center space-x-4 sm:space-x-6 mt-2 md:mt-0">
                 <a href="#" className="text-xs text-white/60 hover:text-white transition-colors">
                   About
                 </a>
